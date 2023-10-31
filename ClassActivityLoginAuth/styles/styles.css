@@ -1,0 +1,80 @@
+/* Apply a reset to remove default padding and margins */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set the background color for the entire page */
+body {
+    background-color: rgb(0, 118, 173);
+    overflow: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Center the login form vertically and horizontally */
+.loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh; /* Ensure full viewport height */
+    background-image: url(/images/login.jpg);
+    position: relative;
+}
+
+/* Style the background image */
+img {
+    position: absolute;
+    width: 100%; /* Make the image cover the entire screen width */
+    height: 100%; /* Make the image cover the entire screen height */
+    object-fit: cover; /* Maintain aspect ratio and cover */
+    z-index: -1; /* Place the image behind other elements */
+}
+
+/* Style the login form */
+.form {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0, 21, 39);
+    border-radius: 30px;
+}
+
+/* Style the input fields */
+.inputs {
+    text-align: center;
+}
+
+/* Style the submit button */
+.submit {
+    background-color: aqua;
+    border: 1px solid aqua;
+    border-radius: 30px;
+    margin-top: 10px; /* Adjust the margin as needed */
+    cursor: pointer;
+    width: 30%;
+    animation: ease-in-out;
+}
+
+/* Style the submit button on hover */
+.submit:hover {
+    animation: ease-in-out;
+    background-color: rgb(0, 218, 218);
+    color: white;
+    font-weight: bold; /* Use "font-weight" instead of "font" */
+    border: 1px solid rgb(0, 209, 209);
+}
+.email{
+    padding: 2%;
+    border-radius: 20px;
+    border: 1px solid aqua;
+    text-align: left;
+    margin: 2%;
+    width: 100%;
+    height: 20px;
+}
