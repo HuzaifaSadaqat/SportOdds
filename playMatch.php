@@ -14,14 +14,9 @@ if (!$conn) {
     // echo'Connection was successful<br>';
 }
 
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +36,6 @@ if (!$conn) {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
 </head>
 
 <body>
@@ -101,7 +95,7 @@ if (!$conn) {
 
             <div class="formwrapper">
                 <div class="container  my-3">
-                    <form action="" method="post"> 
+                    <form action="" method="post">
                         <div class="mb-3">
                             <label for="select_match" class="form-label">Select Match to Play</label>
                             <select class="" autofocus name="select_match" id="select_match" onchange="tossDetail();">
@@ -156,7 +150,6 @@ if (!$conn) {
             request.fail(function(jqXHR, textStatus) {
                 alert("Request failed: " + textStatus);
             });
-
         }
     </script>
     <script>

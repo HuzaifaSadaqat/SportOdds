@@ -107,6 +107,7 @@ if (!$conn) {
     function ball_data() {
         var select_match = $("#match_id").val();
         var bowls = $("#bowl").val();
+        var bowler = $("#bowler").val();
         var overs = $("#over").val();
         var score = $("#score").val();
         var typeofruns = $("#typeofruns").val();
@@ -114,12 +115,34 @@ if (!$conn) {
         var batsman1 = $("#batsman1").val();
         var batsman2 = $("#batsman2").val();
 
+        if (!batsman1 || batsman1 == 0) {
+            alert("Batsman field is required. Please select a value.");
+            return;
+        }
+        if (!batsman2 || batsman2 == 0) {
+            alert("Non striker field is required. Please select a value.");
+            return;
+        }
+        if (!bowler || bowler == 0) {
+            alert("Bowler field is required. Please select a value.");
+            return;
+        }
+        if (!score) {
+            alert("Score field is required. Please select a value.");
+            return;
+        }
+        if (!typeofruns) {
+            alert("Type of Runs field is required. Please select a value.");
+            return;
+        }
+
         $.ajax({
             type: 'POST',
             url: 'insertBallData.php',
             data: {
                 select_match: select_match,
                 bowls: bowls,
+                bowler: bowler,
                 overs: overs,
                 score: score,
                 typeofruns: typeofruns,
@@ -128,6 +151,7 @@ if (!$conn) {
                 batsman2: batsman2
             },
             success: function(response) {
+                // alert(response);
                 ballbyball();
                 tossDetail();
             },
