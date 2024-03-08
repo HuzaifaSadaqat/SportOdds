@@ -36,7 +36,12 @@ if (!$conn) {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <title>Add Umpires Form</title>
+    <!-- Select 2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Chosen -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+
 
     <title>Form Match</title>
 </head>
@@ -55,8 +60,12 @@ if (!$conn) {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -91,15 +100,15 @@ if (!$conn) {
     </div>
     <!-- Left nav bar end  -->
 
-    <div class="rightsection rightsection_creatematch">
+    <div class="rightsection ">
         <h4>Create Match</h4>
 
         <div class="formwrapper">
             <div class="container formcontainer my-4">
                 <form action="../createMatch.php" method="post">
                     <div class="mb-3">
-                        <label for="umpire_name" name="umpire_name" class="form-label">Umpire Name</label>
-                        <select class=" " autofocus name="umpire_id" id="umpire_id" required>
+                        <label for="umpire_name" name="umpire_name" class="col-2 form-label">Umpire Name</label>
+                        <select class="chosen-select  select_pad" autofocus name="umpire_id" id="umpire_id" required>
                             <option disabled selected value> -- Select an option -- </option>
                             <?php
                             $sql = "SELECT umpire_id, umpire_name FROM umpire ";
@@ -111,8 +120,8 @@ if (!$conn) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="match_teamA" class="form-label">Match Teams</label>
-                        <select class=" " name="match_teamA" id="match_teamA" required>
+                        <label for="match_teamA" class="col-2 form-label">Match Teams</label>
+                        <select class="chosen-select  select_pad" name="match_teamA" id="match_teamA" required>
                             <option disabled selected value> -- Select Team A -- </option>
                             <?php
                             $sql = "SELECT * from `team`";
@@ -126,7 +135,7 @@ if (!$conn) {
                             ?>
                         </select>
                         <span>Vs</span>
-                        <select class=" " name="match_teamB" id="match_teamB" required>
+                        <select class="chosen-select  select_pad" name="match_teamB" id="match_teamB" required>
                             <option disabled selected value> -- Select Team B -- </option>
                             <?php
                             $sql = "SELECT * from `team`";
@@ -141,8 +150,8 @@ if (!$conn) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="match_type" name="match_type" class="form-label">Match Type</label>
-                        <select class=" " autofocus name="match_type" id="match_type" required>
+                        <label for="match_type" name="match_type" class="col-2 form-label">Match Type</label>
+                        <select class="chosen-select select_pad" autofocus name="match_type" id="match_type" required>
                             <option disabled selected value> -- Select an option -- </option>
                             <option value="T10">T10</option>";
                             <option value="T20">T20</option>";
@@ -150,12 +159,17 @@ if (!$conn) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="match_venue" name="match_venue" class="form-label">Match Venue</label>
-                        <input type="name" class="form-control" id="match_venue" name="match_venue" aria-describedby="match_venue" required>
+                        <label for="match_venue" name="match_venue" class="col-2 form-label">Match Venue</label>
+                        <input type="name" class="form-control text_field" id="match_venue" name="match_venue" aria-describedby="match_venue" required>
                     </div>
                     <div class="mb-3">
-                        <label for="match_status" name="match_status" class="form-label">Match Status</label>
-                        <select class=" " name="match_status" id="match_status">
+                        <label for="match_dt" class="col-2 form-label">Match Date & Time</label>
+                        <input type="datetime-local" class="form-control text_field" id="match_dt" name="match_dt" aria-describedby="match_dt" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="match_status" name="match_status" class="col-2 form-label">Match Status</label>
+                        <select class="chosen-select select_pad" name="match_status" id="match_status">
                             <option value="In Progress">In Progress</option>
                             <option value="Delayed">Delayed</option>
                             <option value="Ended">Ended</option>
@@ -170,6 +184,16 @@ if (!$conn) {
             </div>
         </div>
     </div>
+    <script>
+        // let table = new DataTable('#myTable');
+        $(document).ready(function() {
+            $("#myTable").DataTable();
+            $('.chosen-select').chosen();
+            $('.select-2').select2();
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
 
 </body>
 

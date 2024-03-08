@@ -19,13 +19,17 @@ $sql = "SELECT * from `umpire` where `umpire_id` = '$id'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 $umpire_name = $row['umpire_name'];
+$umpire_nationality = $row['umpire_nationality'];
+$umpire_age = $row['umpire_age'];
 
 if (isset($_POST['edit'])) {
     $umpire_id = $_POST["edit"];
     $umpire_name = $_POST["umpire_name"];
+    $umpire_nationality = $_POST["umpire_nationality"];
+    $umpire_age = $_POST["umpire_age"];
     // echo $_POST['team_id']; exit;
 
-    $sql = "UPDATE `umpire` SET `umpire_name` = '$umpire_name' WHERE `umpire_id` = '$umpire_id'";
+    $sql = "UPDATE `umpire` SET `umpire_name` = '$umpire_name', `umpire_nationality` = '$umpire_nationality', `umpire_age` = '$umpire_age' WHERE `umpire_id` = '$umpire_id'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -82,8 +86,12 @@ if (isset($_POST['edit'])) {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -115,25 +123,34 @@ if (isset($_POST['edit'])) {
     </div>
     <!-- Left nav bar end  -->
 
-    <section class="section_createumpire">
-        <div class="rightsection">
-            <h4>Add Umpires</h4>
+    <div class="rightsection">
+        <h4>Update Umpires</h4>
 
-            <div class="container my-4">
+        <div class="formwrapper">
+            <div class="container formcontainer my-4">
                 <form action="#" method="post">
                     <div class="mb-3">
-                        <label for="umpire_name" name="umpire_name" class="form-label">Umpire name</label>
-                        <input type="name" class="form-control" id="umpire_name" autofocus name="umpire_name" aria-describedby="umpire_name" required value="<?php echo $umpire_name?>">
+                        <label for="umpire_name" name="umpire_name" class="col-3 form-label">Umpire name</label>
+                        <input type="name" class="form-control text_field" id="umpire_name" autofocus name="umpire_name" aria-describedby="umpire_name" required value="<?php echo $umpire_name ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="umpire_nationality" class="col-3 form-label">Umpire Nationality</label>
+                        <input type="text" class="form-control text_field" id="umpire_nationality" autofocus name="umpire_nationality" aria-describedby="umpire_nationality" required value="<?php echo $umpire_nationality ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="umpire_name" class="col-3 form-label">Umpire Age</label>
+                        <input type="number" class="form-control text_field" id="umpire_age" autofocus name="umpire_age" aria-describedby="umpire_age" required value="<?php echo $umpire_age ?>">
                     </div>
 
                     <input type="hidden" name="edit" value="<?php echo $id ?>" id="hidden">
 
+                    <hr>
                     <!-- <input type="button" class="btn btn-primary" name="submit" value="Submit"> -->
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary submit_btn">Submit</button>
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 
 
 </body>

@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $team_captain = $_POST['team_captain'];
 
     // Prepare and execute the SQL query to fetch existing data to check for uniqueness
-    $stmt = $conn->prepare("SELECT * FROM team WHERE team_id = ? OR team_name = ?");
-    $stmt->bind_param("ss", $team_id, $team_name);
+    $stmt = $conn->prepare("SELECT * FROM team WHERE team_name = ?");
+    $stmt->bind_param("s", $team_name);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -78,7 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-
+    <!-- Select 2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 
@@ -95,8 +97,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -116,6 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </li>
                 <li>
                     <a href="createUmpire.php">Add Umpire</a>
+                </li>
+                <li>
+                    <a href="createVenue.php">Add Venue</a>
                 </li>
                 <li>
                     <a href="createMatch.php">Add Match</a>
@@ -142,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 Results for "Teams"
             </div>
             <div class="container fcontainer ">
-                <table id="" class="table">
+                <table id="myTable" class="table">
                     <thead>
                         <tr>
                             <th scope="col">S No</th>
@@ -155,21 +164,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <tbody>
                         <?php
                         $srno = 0;
-                        $sql = "Select * from `team`";
+                        $sql = "Select * from `team` ORDER BY team_id desc";
                         $result = mysqli_query($conn, $sql);
                         if ($result) {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 $srno = $srno + 1;
                                 $teamid = $row['team_id'];
                                 echo "<tr>
-                            <td scope='row'>" . $srno . "</td>                                
-                            <td>" . $row['team_name'] . "</td>
-                            <td>" . $row['team_coach'] . "</td>
-                            <td>" . $row['team_captain'] . "</td>
-                            <td> 
-                            <button class='edit btn btn-sm btn-primary'><a href='updateTeams.php?updateteam_id=" . $row['team_id'] . "' class='text-light text-decoration-none'>Edit</a></button>
-                            <button class='delete btn btn-sm btn-danger'><a href='deleteTeams.php?deleteteam_id=" . $row['team_id'] . "' class='text-light text-decoration-none' onclick='return deleteRecord(" . $row['team_id'] . ")'>Delete</a></button>
-                            </tr>";
+                                <td scope='row'>" . $srno . "</td>                                
+                                <td>" . $row['team_name'] . "</td>
+                                <td>" . $row['team_coach'] . "</td>
+                                <td>" . $row['team_captain'] . "</td>
+                                <td> 
+                                <button class='edit btn btn-sm btn-primary'><a href='updateTeams.php?updateteam_id=" . $row['team_id'] . "' class='text-light text-decoration-none'>Edit</a></button>
+                                <button class='delete btn btn-sm btn-danger'><a href='deleteTeams.php?deleteteam_id=" . $row['team_id'] . "' class='text-light text-decoration-none' onclick='return deleteRecord(" . $row['team_id'] . ")'>Delete</a></button>
+                                </tr>";
                             }
                         }
                         ?>
@@ -191,14 +200,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 
-    <script src="cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
     <script>
-        // let table = new DataTable('#myTable');
         $(document).ready(function() {
             $("#myTable").DataTable();
+            $('.chosen-select').chosen();
         });
     </script>
-
 </body>
 
 </html>

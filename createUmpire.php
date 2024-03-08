@@ -16,6 +16,8 @@ if (!$conn) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $umpire_name = $_POST['umpire_name'];
+    $umpire_nationality = $_POST['umpire_nationality'];
+    $umpire_age = $_POST['umpire_age'];
 
     // Prepare and execute the SQL query to fetch existing data to check for uniqueness
     $stmt = $conn->prepare("SELECT * FROM umpire WHERE umpire_id = ? OR umpire_name = ?");
@@ -30,20 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <strong>Error!</strong> Input must be unique. Please enter different name and email.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
-    } else
-        $sql = "INSERT INTO `umpire` ( `umpire_name`) VALUES ( '$umpire_name')";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+    } else {
+        $sql = "INSERT INTO `umpire` (`umpire_name`, `umpire_nationality`, `umpire_age`) VALUES ( '$umpire_name', '$umpire_nationality', '$umpire_age')";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>SUCCESS!</strong> Your entry is submitted successfuly.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>';
-    } else {
-        //echo"Record was not inserted successfuly because ". mysqli_error($conn) ;
-        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+        } else {
+            //echo"Record was not inserted successfuly because ". mysqli_error($conn) ;
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>ERROR!</strong> Your entry was not submitted successfuly.We are sorry for inconvenience.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>';
+        }
     }
 }
 
@@ -89,8 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -112,6 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a class="active" href="createUmpire.php">Add Umpire..</a>
                 </li>
                 <li>
+                    <a href="createVenue.php">Add Venue</a>
+                </li>
+                <li>
                     <a href="createMatch.php">Add Match</a>
                 </li>
                 <li>
@@ -125,48 +135,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <!-- Left nav bar end  -->
 
-    <section>
-        <h4>Umpires</h4>
-        <hr>
-        <a class="addnew" href="forms/formUmpire.php">Add New</a>
+    <section class="section_createteams">
+        <h3>Umpires</h4>
 
-        <div class="table-header">
-            Results for "Umpires"
-        </div>
+            <hr>
+            <a class="addnew" href="forms/formUmpire.php">Add New</a>
 
-        <div class="container fcontainer">
-            <table id="" class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">S No</th>
-                        <th scope="col">Umpire Name</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $srno = 0;
-                    $sql = "Select * from `umpire`";
-                    $result = mysqli_query($conn, $sql);
-                    if ($result) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $srno = $srno + 1;
-                            $umpire_id = $row['umpire_id'];
-                            echo "<tr>
+            <div class="table-header">
+                Results for "Umpires"
+            </div>
+
+            <div class="container fcontainer">
+                <table id="myTable" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">S No</th>
+                            <th scope="col">Umpire Name</th>
+                            <th scope="col">Umpire Nationality</th>
+                            <th scope="col">Umpire Age</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $srno = 0;
+                        $sql = "Select * from `umpire` ORDER BY umpire_id desc";
+                        $result = mysqli_query($conn, $sql);
+                        if ($result) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $srno = $srno + 1;
+                                $umpire_id = $row['umpire_id'];
+                                echo "<tr>
                             <td scope='row'>" . $srno . "</td>                                
                             <td>" . $row['umpire_name'] . "</td>
+                            <td>" . $row['umpire_nationality'] . "</td>
+                            <td>" . $row['umpire_age'] . "</td>
                             <td> 
                             <button class='edit btn btn-sm btn-primary'><a href='updateUmpire.php?updateumpire_id=" . $row['umpire_id'] . "' class='text-light text-decoration-none'>Edit</a></button>
                             <button class='delete btn btn-sm btn-danger'><a href='deleteUmpire.php?deleteumpire_id=" . $row['umpire_id'] . "' class='text-light text-decoration-none' onclick='return deleteRecord(" . $row['umpire_id'] . ")'>Delete</a></button>
                             </tr>";
+                            }
                         }
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
-        </div>
     </section>
 
     <script>

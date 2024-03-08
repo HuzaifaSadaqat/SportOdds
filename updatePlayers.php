@@ -15,6 +15,7 @@ if (!$conn) {
 
 $id = $_GET['updateplayer_id'];
 
+
 $sql = "SELECT * from `players` where `player_id` = '$id'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
@@ -22,7 +23,7 @@ $team_id = $row['team_id'];
 $player_name = $row['player_name'];
 $player_desig = $row['player_desig'];
 $player_status = $row['player_status'];
-
+$player_img = $row['img_url'];
 
 
 if (isset($_POST['edit'])) {
@@ -31,9 +32,40 @@ if (isset($_POST['edit'])) {
     $player_name = $_POST["player_name"];
     $player_desig = $_POST["player_desig"];
     $player_status = $_POST["player_status"];
-    // echo $_POST['team_id']; exit;
+    $new_img_name = $_POST["old_img"];
 
-    $sql = "UPDATE `players` SET `team_id` = '$team_id', `player_name` = '$player_name', `player_desig` = '$player_desig' WHERE `player_id` = '$player_id'";
+    // echo "<pre>";
+    // print_r($_FILES['my_image']);
+    // echo "</pre>";
+    if (isset($_FILES['my_image'])) {
+
+        $img_name = $_FILES['my_image']['name'];
+        $tmp_name = $_FILES['my_image']['tmp_name'];
+        $img_size = $_FILES['my_image']['size'];
+        $error = $_FILES['my_image']['error'];
+
+
+        if ($error === 0) {
+            if ($img_size > 1250000) {
+                $em = "File is too large";
+                header("Location: formPlayer.php?error=$em");
+            } else {
+                $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+                $img_ex_lc = strtolower($img_ex);
+
+                $allowed_exs = array("jpg", "png", "jpeg");
+                if (in_array($img_ex_lc, $allowed_exs)) {
+                    $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
+                    $img_upload_path = 'picUploads/' . $new_img_name;
+                    move_uploaded_file($tmp_name, $img_upload_path);
+                }
+            }
+        }
+    }
+    echo $_POST['edit'];
+
+    echo "test";
+    $sql = "UPDATE `players` SET `player_name` = '$player_name', `player_desig` = '$player_desig', `img_url` = '$new_img_name' WHERE `player_id` = '$player_id'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -50,7 +82,6 @@ if (isset($_POST['edit'])) {
         </div>';
     }
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -73,6 +104,18 @@ if (isset($_POST['edit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Datatables  -->
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <style>
+        .alb {
+            width: 100px;
+            height: 50px;
+            padding: 5px;
+        }
+
+        .alb img {
+            width: 20%;
+            height: 100%;
+        }
+    </style>
 
 </head>
 
@@ -91,8 +134,12 @@ if (isset($_POST['edit'])) {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -124,13 +171,14 @@ if (isset($_POST['edit'])) {
     </div>
     <!-- Left nav bar end  -->
 
-    <section>
-        <div class="rightsection">
-            <h4>Update Players</h4>
-            <div class="container my-4">
-                <form action="#" method="post">
+    <div class="rightsection rightsection_addplayers">
+        <h4>Update Players</h4>
+
+        <div class="formwrapper">
+            <div class="container formcontainer my-4">
+                <form action="#" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="team_id" name="team_id" class="form-label">Team name</label>
+                        <label for="team_id" name="team_id" class="col-3 form-label">Team name</label>
                         <?php
                         $sql1 = "SELECT * FROM team WHERE team_id = $team_id";
                         $result1 = mysqli_query($conn, $sql1);
@@ -138,8 +186,7 @@ if (isset($_POST['edit'])) {
                         $team_name = $row1['team_name'];
 
                         ?>
-                        <!-- <input type="name" class="form-control" id="team_id" autofocus name="team_id" aria-describedby="team_id" required value="<?php echo $team_id  ?>"> -->
-                        <select class="bg-dark" name="team_id" id="team_id" value="<?php echo $team_name ?>" required>
+                        <select class="select_pad" name="team_id" id="team_id" value="<?php echo $team_name ?>" required autofocus>
                             <?php
                             $sql = "SELECT * FROM team";
                             $result = mysqli_query($conn, $sql);
@@ -155,12 +202,12 @@ if (isset($_POST['edit'])) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="player_name" name="player_name" class="form-label">Player Name</label>
-                        <input type="name" class="form-control" id="player_name" name="player_name" aria-describedby="player_name" required value="<?php echo $player_name  ?>">
+                        <label for="player_name" name="player_name" class="col-3 form-label">Player Name</label>
+                        <input type="name" class="form-control text_field" id="player_name" name="player_name" aria-describedby="player_name" required value="<?php echo $player_name  ?>">
                     </div>
                     <div class="mb-3">
-                        <label for="player_desig" name="player_desig" class="form-label">Player Designation</label>
-                        <select class="bg-dark" name="player_desig" id="player_desig" required value="<?php echo $player_desig  ?>">
+                        <label for="player_desig" name="player_desig" class="col-3 form-label">Player Designation</label>
+                        <select class="select_pad" name="player_desig" id="player_desig" required value="<?php echo $player_desig  ?>">
                             <option disabled selected value> -- Select an option -- </option>
 
                             <option value="Batsman" <?php if ($player_desig == "Batsman") {
@@ -178,8 +225,8 @@ if (isset($_POST['edit'])) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="player_status" name="player_status" class="form-label">Player Status</label>
-                        <select class="bg-dark" name="player_status" id="player_status" name="player_status" value="<?php echo $player_status  ?>">
+                        <label for="player_status" name="player_status" class="col-3 form-label">Player Status</label>
+                        <select class="select_pad" name="player_status" id="player_status" name="player_status" value="<?php echo $player_status  ?>">
                             <option value="Active" <?php if ($player_status == "Active") {
                                                         echo "selected";
                                                     } ?>>Active</option>
@@ -188,13 +235,28 @@ if (isset($_POST['edit'])) {
                                                         } ?>>Unactive</option>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <?php
+                        if (isset($_GET['error'])) : ?>
+                            <p><?php echo $_GET['error']; ?></p>
+                        <?php endif ?>
+
+                        <label for="player_pic" class="col-3 form-label">Player Picture</label>
+                        <span class="alb">
+                            <img src="picUploads/<?= $player_img ?>">
+                        </span>
+                        <input type="hidden" name="old_img" value="<?php echo $player_img ?>">
+                        <input type="file" class="text_field" name="my_image">
+                    </div>
+
                     <input type="hidden" name="edit" value="<?php echo $id ?>" id="hidden">
 
-                    <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                    <hr>
+                    <button type="submit" name="submit" class="btn btn-primary submit_btn">Update</button>
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 
 
 </body>

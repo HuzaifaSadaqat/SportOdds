@@ -1,7 +1,26 @@
+<?php
+//conn db        
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "sportodds";
+
+//create conncetion
+$conn = mysqli_connect($servername, $username, $password, $database);
+
+if (!$conn) {
+    die("Sorry Connection unsuccessful" . mysqli_connect_error());
+} else {
+    // echo'Connection was successful<br>';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Venue</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Shortcut Icon-->
@@ -20,8 +39,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
-
-    <title>Create Teams Form</title>
 </head>
 
 <body>
@@ -34,6 +51,7 @@
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li> -->
             </ul>
+
         </nav>
 
         <div class="btn">
@@ -55,7 +73,7 @@
                     <a href="../admin.php">Dashboard</a>
                 </li>
                 <li>
-                    <a class="active" href="../createTeams.php ">Add Teams..</a>
+                    <a href="../createTeams.php ">Add Teams</a>
                 </li>
                 <li>
                     <a href="../addPlayers.php">Add Players</a>
@@ -64,7 +82,10 @@
                     <a href="../createUmpire.php">Add Umpire</a>
                 </li>
                 <li>
-                    <a href="../createMatch.php">Add Match</a>
+                    <a class="active" href="../createVenue.php">Add Venue</a>
+                </li>
+                <li>
+                    <a href="../createMatch.php">Add Match..</a>
                 </li>
                 <li>
                     <a href="../matchToss.php">Match Toss</a>
@@ -77,31 +98,27 @@
     </div>
     <!-- Left nav bar end  -->
 
-    <div class="rightsection rightsection_createteams">
-        <h4>Create Teams</h4>
+    <div class="rightsection rightsection_addplayers">
+        <h4>Add Players</h4>
 
         <div class="formwrapper">
-            <div class="container formcontainer my-3">
-                <form action="../createTeams.php" method="post">
+            <div class="container formcontainer my-4">
+                <form action="../createVenue.php" method="post">
                     <div class="mb-3">
-                        <label for="team_name" name="team_name" class="col-3 form-label">Team Name</label>
-                        <input type="text" class="form-control text_field" id="team_name" name="team_name" aria-describedby="team_name" autofocus required oninvalid="this.setCustomValidity('Team Name is required')" oninput="this.setCustomValidity('')">
-                        
+                        <label for="venue_name" class="col-3 form-label">Venue Name</label>
+                        <input type="text" class="form-control text_field" id="venue_name" name="venue_name" aria-describedby="venue_name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="team_coach" name="team_coach" class="col-3 form-label">Team Coach</label>
-                        <input type="text" class="form-control text_field" id="team_caoch" name="team_coach" aria-describedby="team_coach" required oninvalid="this.setCustomValidity('Team Coach is required')" oninput="this.setCustomValidity('')">
+                        <label for="venue_country" class="col-3 form-label">Venue Country</label>
+                        <input type="text" class="form-control text_field" id="venue_country" name="venue_country" aria-describedby="venue_country" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="team_captain" name="team_captain" class="col-3 form-label">Team Captain</label>
-                        <input type="text" class="form-control text_field" id="team_captain" name="team_captain" aria-describedby="team_captain" required oninvalid="this.setCustomValidity('Team Captain is required')" oninput="this.setCustomValidity('')">
+                    <div class="mb-3">
+                        <label for="venue_city" class="col-3 form-label">Venue City</label>
+                        <input type="text" class="form-control text_field" id="venue_city" name="venue_city" aria-describedby="venue_city" required>
                     </div>
+
                     <hr>
                     <button type="submit" class="btn btn-primary submit_btn">Submit</button>
                 </form>
             </div>
         </div>
-    </div>
-</body>
-
-</html>

@@ -14,15 +14,36 @@ if (!$conn) {
     // echo'Connection was successful<br>';
 }
 
-?>
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $venue_name = $_POST['venue_name'];
+    $venue_country = $_POST['venue_country'];
+    $venue_city = $_POST['venue_city'];
 
+    $sql = "INSERT INTO `venue` (`venue_name`, `venue_country`, `venue_city`) VALUES ('$venue_name', '$venue_country', '$venue_city')";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>SUCCESS!</strong> Your entry is submitted successfuly.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+    } else {
+        //echo"Record was not inserted successfuly because ". mysqli_error($conn) ;
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>ERROR!</strong> Your entry was not submitted successfuly.We are sorry for inconvenience.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+    }
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Match</title>
+    <title>Add Venue</title>
     <!--Shortcut Icon-->
     <link rel="icon" href="assets/img/logo/favicon.png">
     <!--Bootstrap Min Css-->
@@ -38,11 +59,13 @@ if (!$conn) {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <!-- Select 2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 
 <body>
-
     <header>
         <img src="assets/img/logo/logo.png" alt="logo">
         <nav>
@@ -83,13 +106,13 @@ if (!$conn) {
                     <a href="createUmpire.php">Add Umpire</a>
                 </li>
                 <li>
-                    <a href="createVenue.php">Add Venue</a>
+                    <a class="active" href="createVenue.php">Add Venue..</a>
                 </li>
                 <li>
                     <a href="createMatch.php">Add Match</a>
                 </li>
                 <li>
-                    <a class="active" href="matchToss.php">Match Toss...</a>
+                    <a href="matchToss.php">Match Toss</a>
                 </li>
                 <li>
                     <a href="playMatch.php">Play Match</a>
@@ -99,14 +122,14 @@ if (!$conn) {
     </div>
     <!-- Left nav bar end  -->
 
-    <section class="section_createteams">
-        <h3>Match Toss</h3>
+    <section class="section_creatematch">
+        <h3>Venues</h3>
 
         <hr>
-        <a class="addnew" href="forms/formToss.php">Add New</a>
+        <a class="addnew" href="forms/formVenue.php">Add New</a>
 
         <div class="table-header">
-            Results for "Match Tosses"
+            Results for "Venues"
         </div>
 
         <div class="container fcontainer">
@@ -114,96 +137,56 @@ if (!$conn) {
                 <thead>
                     <tr>
                         <th scope="col">S No</th>
-                        <th scope="col">Match Teams</th>
-                        <th scope="col">Team Toss Won</th>
-                        <th scope="col">Team Decision</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Venue Name</th>
+                        <th scope="col">Venue Country</th>
+                        <th scope="col">Venue City</th>
+                        <th scope="col" style="text-align: right; padding-right: 60px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $srno = 0;
-                    $sql = "SELECT * from `toss` ORDER BY toss_id desc";
+                    $sql = "Select * from `venue` ORDER BY venue_id desc";
                     $result = mysqli_query($conn, $sql);
-
                     if ($result) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             $srno = $srno + 1;
 
-                            $sql = "SELECT * FROM `m_atch` WHERE `match_id` = " . $row['match_id'];
-                            $result1 = mysqli_query($conn, $sql);
-                            $row1 = mysqli_fetch_assoc($result1);
-                            $teamA = $row1['match_teamA'];
-                            $teamB = $row1['match_teamB'];
-
-                            $sql = "SELECT * from  `team` WHERE team_id = $teamA";
-                            $result2 = mysqli_query($conn, $sql);
-                            $row2 = mysqli_fetch_assoc($result2);
-                            $teamAName = $row2['team_name'];
-
-                            $sql = "SELECT * from  `team` WHERE team_id = $teamB";
-                            $result3 = mysqli_query($conn, $sql);
-                            $row3 = mysqli_fetch_assoc($result3);
-                            $teamBName = $row3['team_name'];
-
-                            $sql = "SELECT * from  `team` WHERE team_id = " . $row['team_toss_won'];
-                            $result4 = mysqli_query($conn, $sql);
-                            $row4 = mysqli_fetch_assoc($result4);
-                            $teamTossWon = $row4['team_name'];
-
-
-                    ?>
-                            <tr>
-                                <td scope='row'><?= $srno ?> </td>
-                                <td><?= $teamAName . " Vs " . $teamBName ?></td>
-                                <td><?= $teamTossWon ?></td>
-                                <td><?= $row['team_decision'] ?></td>
+                            echo "<tr>
+                            <td scope='row'>" . $srno . "</td>   
+                            <td>" . $row['venue_name'] . "</td>
+                            <td>" . $row['venue_country'] . "</td>
+                            <td>" . $row['venue_city'] . "</td>
+                            "; ?>
+                            <td style="text-align: right;">
+                                <button class='edit btn btn-sm btn-primary'>
+                                    <a href='updateVenue.php?updatevenue_id=<?php echo $row['venue_id'] ?>' class='text-light text-decoration-none'>Edit</a>
+                                </button>
+                                <button class='delete btn btn-sm btn-danger'>
+                                    <a href='deleteVenue.php?deletevenue_id=<?php echo $row['venue_id']; ?>' class='text-light text-decoration-none' onclick='return deleteRecord("<?php echo $row['venue_id']; ?>")'>Delete</a>
+                                </button>
+                                </tr>
                         <?php
-                            echo "<td>
-                                    <button class='delete btn btn-sm btn-danger'><a href='deleteToss.php?deleteToss_id=" . $row['toss_id'] . "' class='text-light text-decoration-none' onclick='return deleteRecord(" . $row['toss_id'] . ")'>Delete</a></button>
-                                </td>
-                            </tr>";
                         }
                     }
                         ?>
+
                 </tbody>
             </table>
         </div>
-        
-
-
-    </section> 
+    </section>
 
     <script>
-        function toss3() {
-            var select_match = $('#select_match').val();
-            var request = $.ajax({
-                url: 'insert.php',
-                type: "POST",
-                data: {
-                    select_match: select_match
-                },
-                dataType: "html",
-            });
-            request.done(function(html) {
-                // alert(html);
-                $("#team_toss_won").html(html);
-            });
-            request.fail(function(jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
-            });
-        }
-    </script>
-
-    <script>
-        function deleteRecord(toss_id) {
+        function deleteRecord(venue_id) {
             if (confirm("Are you sure you want to delete this record?")) {
-                window.location = 'deleteToss.php?deleteToss_id=' + toss_id;
+                window.location = 'deleteVenue.php?deletevenue_id=' + venue_id;
             } else {
                 return false;
             }
         }
-
+    </script>
+    <script>
+        // let table = new DataTable('#myTable');
         $(document).ready(function() {
             $("#myTable").DataTable();
         });

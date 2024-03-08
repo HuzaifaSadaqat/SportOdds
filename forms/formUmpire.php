@@ -53,8 +53,12 @@ if (!$conn) {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -95,11 +99,20 @@ if (!$conn) {
             <div class="container formcontainer my-4">
                 <form action="../createUmpire.php" method="post">
                     <div class="mb-3">
-                        <label for="umpire_name" name="umpire_name" class="form-label">Umpire name</label>
-                        <input type="name" class="form-control" id="umpire_name" autofocus name="umpire_name" aria-describedby="umpire_name" required>
+                        <label for="umpire_name" name="umpire_name" class="col-3 form-label">Umpire name</label>
+                        <input type="name" class="form-control text_field" id="umpire_name" autofocus name="umpire_name" aria-describedby="umpire_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="umpire_nationality" class="col-3 form-label">Umpire Nationality</label>
+                        <input type="text" class="form-control text_field" id="umpire_nationality" autofocus name="umpire_nationality" aria-describedby="umpire_nationality" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="umpire_age"  class="col-3 form-label">Umpire Age</label>
+                        <input type="number" class="form-control text_field" id="umpire_age" autofocus name="umpire_age" aria-describedby="umpire_age" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary ">Submit</button>
+                    <hr>
+                    <button type="submit" class="btn btn-primary submit_btn">Submit</button>
                 </form>
             </div>
         </div>

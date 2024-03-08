@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $player_name = $_POST['player_name'];
     $player_desig = $_POST['player_desig'];
     $player_status = $_POST['player_status'];
+    // $player_pic = $_POST['my_image'];
 
     // Prepare and execute the SQL query to fetch existing data to check for uniqueness
     $stmt = $conn->prepare("SELECT * FROM players WHERE player_id = ? OR player_name = ?");
@@ -34,23 +35,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
     } else {
-        $sql = "INSERT INTO `players` (`team_id`, `player_name`, `player_desig`, `player_status`) VALUES ('$team_id' , '$player_name', '$player_desig', '$player_status')";
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>SUCCESS!</strong> Your entry is submitted successfuly.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>';
-        } else {
-            //echo"Record was not inserted successfuly because ". mysqli_error($conn) ;
-            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+        if (isset($_FILES['my_image'])) {
+            // echo "<pre>";
+            // print_r($_FILES['my_image']);
+            // echo "</pre>";
+
+            $img_name = $_FILES['my_image']['name'];
+            $tmp_name = $_FILES['my_image']['tmp_name'];
+            $img_size = $_FILES['my_image']['size'];
+            $error = $_FILES['my_image']['error'];
+
+            if ($error === 0) {
+                if ($img_size > 1250000) {
+                    $em = "File is too large";
+                    header("Location: formPlayer.php?error=$em");
+                } else {
+                    $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+                    $img_ex_lc = strtolower($img_ex);
+
+                    $allowed_exs = array("jpg", "png", "jpeg");
+                    if (in_array($img_ex_lc, $allowed_exs)) {
+                        $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
+                        $img_upload_path = 'picUploads/' . $new_img_name;
+                        move_uploaded_file($tmp_name, $img_upload_path);
+                    }
+                }
+            } else {
+                $em = "You can not upload this type of file";
+                header("Location: formPlayer.php?error=$em");
+            }
+
+            $sql = "INSERT INTO `players` (`team_id`, `player_name`, `player_desig`, `player_status`, `img_url`) VALUES ('$team_id' , '$player_name', '$player_desig', '$player_status', '$new_img_name')";
+            $result = mysqli_query($conn, $sql);
+            if ($result) {
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>SUCCESS!</strong> Your entry is submitted successfuly.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+            } else {
+                //echo"Record was not inserted successfuly because ". mysqli_error($conn) ;
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>ERROR!</strong> Your entry was not submitted successfuly.We are sorry for inconvenience.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>';
+            }
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -66,8 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!--Main custom Css-->
     <link rel="stylesheet" href="assets/css/main.css">
-    <!-- My css  -->
-    <link rel="stylesheet" href="assets/css/style.css">
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -75,6 +104,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <!-- Chosen -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+    <!-- My css  -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+
+    <style>
+        .alb {
+            width: 95px;
+            height: 50px;
+            padding: 5px;
+        }
+
+        .alb img {
+            width: 70%;
+            height: 100%;
+        }
+    </style>
 
 </head>
 
@@ -92,8 +139,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </nav>
 
         <div class="btn">
-            <button class="button">Login</button>
-            <button class="button signup">Admin</button>
+            <a href="logout.php" class="cmn--btn" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
     </header>
     <!--Header End-->
@@ -115,6 +166,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="createUmpire.php">Add Umpire</a>
                 </li>
                 <li>
+                    <a href="createVenue.php">Add Venue</a>
+                </li>
+                <li>
                     <a href="createMatch.php">Add Match</a>
                 </li>
                 <li>
@@ -130,15 +184,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <section class="section_addplayers">
         <h3>Players</h4>
-
+            <hr>
             <a class="addnew" href="forms/formPlayer.php">Add New</a>
 
             <div class="table-header">
                 Results for "Players"
             </div>
 
-            <div class="container fcontainer">
-                <table id="" class="table">
+            <div class="container fcontainer ">
+                <table id="myTable" class="table">
                     <thead>
                         <tr>
                             <th scope="col">S No</th>
@@ -146,13 +200,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <th scope="col">Player name</th>
                             <th scope="col">Player Designation</th>
                             <th scope="col">Player Status</th>
+                            <th scope="col">Player Picture</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $srno = 0;
-                        $sql = "Select * from `players`";
+                        $sql = "SELECT * FROM `players` ORDER BY player_id DESC";
                         $result = mysqli_query($conn, $sql);
 
                         if ($result) {
@@ -167,40 +222,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $player_id = $row['player_id'];
 
                                 echo "<tr>
-                            <td scope='row'>" . $srno . "</td>                                
-                            <td>" . $row1['team_name'] . "</td>
-                            <td>" . $row['player_name'] . "</td>
-                            <td>" . $row['player_desig'] . "</td>
-                            <td>" . $row['player_status'] . "</td>
-                            <td> 
-                            <button class='edit btn btn-sm btn-primary'><a href='updatePlayers.php?updateplayer_id=" . $row['player_id'] . "' class='text-light text-decoration-none'>Edit</a></button>
-                            <button class='delete btn btn-sm btn-danger'><a href='deletePlayers.php?deleteplayer_id=" . $row['player_id'] . "' class='text-light text-decoration-none' onclick='return deleteRecord(" . $row['player_id'] . ")'>Delete</a></button>
-                            </tr>";
+                                <td>" . $srno . "</td>                                
+                                <td>" . $row1['team_name'] . "</td>
+                                <td>" . $row['player_name'] . "</td>
+                                <td>" . $row['player_desig'] . "</td>
+                                <td>" . $row['player_status'] . "</td>
+                                <td>
+                                    <div class='alb'>
+                                        <img src='picUploads/" . $row['img_url'] . "' alt=''>
+                                    </div>
+                                </td>";
+
+                                $sql2 = "SELECT team_id FROM players WHERE player_id = $player_id";
+                                $result2 = mysqli_query($conn, $sql2);
+                                $row2 = mysqli_fetch_assoc($result2);
+                                $team = $row2['team_id'];
+
+                                $sql3 = "SELECT match_teamA, match_teamB FROM m_atch WHERE (match_teamA = $team OR match_teamB = $team) AND match_status != 'Ended'";
+                                $result3 = mysqli_query($conn, $sql3);
+                                $row3 = mysqli_fetch_assoc($result3);
+
+                                if (!$row3) {
+                                    echo "<td>";
+                                    echo "
+                                    <button class='edit btn btn-sm btn-primary'><a href='updatePlayers.php?updateplayer_id=" . $row['player_id'] . "' class='text-light text-decoration-none'>Edit</a></button>
+                                    <button class='delete btn btn-sm btn-danger'><a href='deletePlayers.php?deleteplayer_id=" . $row['player_id'] . "' class='text-light text-decoration-none' onclick='return deleteRecord(" . $row['player_id'] . ")'>Delete</a></button>";
+                                    echo "</td>";
+                                } else {
+                                    echo "<td>";
+                                    echo "Player already in a match";
+                                    echo "</td>";
+                                }
                             }
                         }
                         ?>
                     </tbody>
                 </table>
             </div>
-
+            <div class="my-4" style="color: whitesmoke;">
+                END OF PAGE
             </div>
     </section>
 
     <script>
         function deleteRecord(player_id) {
-            if (confirm("Are you sure you want to delete this record?")) {
+            if (confirm("Are you sure you want to delete this player?")) {
                 window.location = 'deletePlayers.php?deleteplayer_id=' + player_id;
             } else {
                 return false;
             }
         }
     </script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
     <script>
-        // let table = new DataTable('#myTable');
         $(document).ready(function() {
             $("#myTable").DataTable();
+            $('.chosen-select').chosen();
         });
     </script>
+
 
 
 </body>

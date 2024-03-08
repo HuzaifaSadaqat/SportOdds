@@ -6,7 +6,7 @@
 /*Abstracts / mixins*/
 /*Abstracts / variables*/
 :root {
-  --body-color: #d6dae7;
+  --body-color: #060C1F;
   --active-color: #09ff8d;
   --active-two: #09ff8cb3;
   --theme-one: #88B6FF;
@@ -46,6 +46,7 @@ body {
   font-size: 14px;
   background: var(--body-color);
   overflow-x: auto;
+  overflow-y: auto;
 }
 
 h2,

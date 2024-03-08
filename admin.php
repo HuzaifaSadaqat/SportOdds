@@ -1,3 +1,6 @@
+<?php
+require('auth_session.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,62 +111,75 @@
     <?php
     // if (isset($_SESSION['username']) && isset($_SESSION['password']) && isset($_SESSION['username']) != "" && isset($_SESSION['username']) != "") {
     ?>
-        <header>
-            <img src="assets/img/logo/logo.png" alt="logo">
-            <nav>
-                <ul>
-                    <!-- <li><a href="#">Home</a></li>
+    <header>
+        <img src="assets/img/logo/logo.png" alt="logo">
+        <nav>
+            <ul>
+                <!-- <li><a href="#">Home</a></li>
                 <li><a href="#">Services</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li> -->
-                </ul>
+            </ul>
 
-            </nav>
+        </nav>
 
-            <div class="btn">
-                <button class="button">Login</button>
-                <button class="button signup">Admin</button>
-            </div>
-        </header>
-
-        <!--Header End-->
-
-        <!-- Left navbar -->
-        <div class="left_navbar_container">
-            <div class="left_navbar">
-                <ul>
-                    <li>
-                        <a href="admin.php">Dashboard..</a>
-                    </li>
-                    <li>
-                        <a href="createTeams.php">Create Teams</a>
-                    </li>
-                    <li>
-                        <a href="addPlayers.php">Add Players</a>
-                    </li>
-                    <li>
-                        <a href="createUmpire.php">Create Umpire</a>
-                    </li>
-                    <li>
-                        <a href="createMatch.php">Create Match</a>
-                    </li>
-                    <li>
-                        <a href="matchToss.php">Play Match</a>
-                    </li>
-                </ul>
-            </div>
+        <!-- <div class="btn">
+            <a href="logout.php" class="button">Logout</a>
+        </div> -->
+        <div class="btn">
+            <a href="logout.php" class="cmn--btn btn-max-width-height" data-bs-toggle="" data-bs-target="">
+                <span>Logout</span>
+            </a>
+            <a href="#0" class="cmn--btn2 btn-max-width-height" data-bs-toggle="" data-bs-target="">
+                <span>Admin</span>
+            </a>
         </div>
+    </header>
 
-        <section>
-            <div class="rightsection">
-                Section
-            </div>
-        </section>
+    <!--Header End-->
+
+    <!-- Left navbar -->
+    <div class="left_navbar_container">
+        <div class="left_navbar">
+            <ul>
+                <li>
+                    <a class="active" href="admin.php">Dashboard..</a>
+                </li>
+                <li>
+                    <a href="createTeams.php">Add Teams</a>
+                </li>
+                <li>
+                    <a href="addPlayers.php">Add Players</a>
+                </li>
+                <li>
+                    <a href="createUmpire.php">Add Umpire</a>
+                </li>
+                <li>
+                    <a href="createVenue.php">Add Venue</a>
+                </li>
+                <li>
+                    <a href="createMatch.php">Add Match</a>
+                </li>
+                <li>
+                    <a href="matchToss.php">Match Toss</a>
+                </li>
+                <li>
+                    <a href="playMatch.php">Play Match</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <section>
+        <div class="rightsection">
+            Section
+        </div>
+    </section>
 
 
 
 
-        <!-- <footer class="footer">
+    <!-- <footer class="footer">
         <div class="fcontainer">
             <div class="row">
                 <div class="footer-col">
