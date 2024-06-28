@@ -72,10 +72,10 @@ if (!$conn) {
                     <a href="../admin.php">Dashboard</a>
                 </li>
                 <li>
-                    <a href="../createTeams.php ">Add Teams..</a>
+                    <a href="../createTeams.php ">Add Teams</a>
                 </li>
                 <li>
-                    <a class="active" href="../addPlayers.php">Add Players</a>
+                    <a class="active" href="../addPlayers.php">Add Players..</a>
                 </li>
                 <li>
                     <a href="../createUmpire.php">Add Umpire</a>
@@ -117,7 +117,7 @@ if (!$conn) {
                     </div>
                     <div class="mb-3">
                         <label for="player_name" name="player_name" class="col-3 form-label">Player Name</label>
-                        <input type="name" class="form-control text_field" id="player_name" name="player_name" aria-describedby="player_name" required>
+                        <input type="name" class="form-control text_field" id="player_name" name="player_name" aria-describedby="player_name" placeholder="Player Name" style="font-size: small;" required>
                     </div>
                     <div class="mb-3">
                         <label for="player_desig" name="player_desig" class="col-3 form-label">Player Designation</label>

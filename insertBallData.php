@@ -20,18 +20,22 @@ $overs = $_POST['overs'];
 $scores = $_POST['score'];
 $fours = '0';
 $sixes = '0';
+
 if ($scores == '4') {
     $fours = '1';
 } elseif ($scores == '6') {
     $sixes = '1';
 }
+
 $typeofruns = $_POST['typeofruns'];
 $outtype = $_POST['outtype'];
+
 if ($outtype) {
     $wicket = 1;
 } else {
     $wicket = 0;
 }
+
 $batsman1 = $_POST['batsman1'];
 $batsman2 = $_POST['batsman2'];
 $bowler = $_POST['bowler'];

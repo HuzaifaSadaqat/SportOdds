@@ -22,7 +22,6 @@ $row = mysqli_fetch_assoc($result);
 $team_won = $row['team_toss_won'];
 $decision = $row['team_decision'];
 
-// echo ($team_won == $row['match_teamA']) ? $row['match_teamB'] : $row['match_teamA'];exit;   
 $team_lost = ($team_won == $row['match_teamA']) ? $row['match_teamB'] : $row['match_teamA'];
 
 $sql = "SELECT * FROM `team` where `team_id` = $team_won";
@@ -57,11 +56,13 @@ $team_bowl = ($decision == 'Bowl') ? $team_won : $team_lost;
         $sql1 = "SELECT score, bowl_per_over, typeofrun from match_details WHERE match_id = $select_match ORDER BY match_details_id desc";
         $result1 = mysqli_query($conn, $sql1);
         $row1 = mysqli_fetch_assoc($result1);
+
         if ($row1) {
             $lastScore = $row1['score'];
             $lastBowl = $row1['bowl_per_over'];
             $typeofrun = $row1['typeofrun'];
         }
+
         if (isset($lastScore) || isset($lastBowl)) {
             if ($lastScore % 2 == 1 && $typeofrun == "Batted" || $lastBowl == '6') {
                 // Swap the positions of batsman1 and batsman2
@@ -84,7 +85,7 @@ $team_bowl = ($decision == 'Bowl') ? $team_won : $team_lost;
 
         ?>
 
-        <!--                                   //BATSMAN SELECT STARTING -->
+        <!--//BATSMAN SELECT STARTING -->
         <label for="select_match" class="col-2 form-label">Select Batter</label>
         <select class="chosen-select col-4 select_pad" name=" batsman1" id="batsman1">
             <option value='0'> -- Select a Batter --</option>
@@ -107,7 +108,7 @@ $team_bowl = ($decision == 'Bowl') ? $team_won : $team_lost;
                 } else {
                     $selected1 = ($playerid == $batsman1) ? 'selected' : '';
                 }
-                echo "<option value='$playerid' $selected1>$playername (Batsman)</option>";
+                echo "<option value='$playerid' $selected1 > $playername (Batsman)</option>";
             }
             ?>
         </select>
@@ -387,7 +388,7 @@ $team_bowl = ($decision == 'Bowl') ? $team_won : $team_lost;
         var batsman1 = $('#batsman1').val();
         var batsman2 = $('#batsman2').val();
         var bowler = $('#bowler').val();
-        
+
 
 
         var request = $.ajax({
